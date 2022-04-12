@@ -4,33 +4,35 @@ namespace KukoinServer.Services
 {
     public class KucoinProviderService
     {
-        private readonly KucoinMessagingService messagingService;
-        private readonly OrderBookService orderBookService;
+        private readonly KucoinMessagingService _messagingService;
+        private readonly OrderBookService _orderBookService;
+        private readonly MessagesStorage _messagesStorage;
 
-        public KucoinProviderService(KucoinMessagingService messagingService, OrderBookService orderBookService)
+        public KucoinProviderService(KucoinMessagingService messagingService, OrderBookService orderBookService, MessagesStorage messagesStorage)
         {
-            this.messagingService = messagingService;
-            this.orderBookService = orderBookService;
+            _messagingService = messagingService;
+            _orderBookService = orderBookService;
+            _messagesStorage = messagesStorage;
         }
 
         internal async Task<StatusDTO> GetInfo(string pairId)
         {
-            if (!messagingService.isConnected(pairId))
+            if (!_messagingService.isConnectedAndReady(pairId))
             {
-                var isSucess = await messagingService.ConnectToSocket(pairId);
+                var isSucess = await _messagingService.ConnectToSocket(pairId);
                 if (!isSucess)
                 {
                     // log error can not connect
                     return null;
                 }
             }
-            var lastMessage = await messagingService.GetLastMessage();
+            var lastMessage = _messagesStorage.GetMessages();
             if (lastMessage == null)
             {
                 // log error message not found
                 return null;
             }
-            var orderBook = await orderBookService.GetOrderBook(pairId);
+            var orderBook = await _orderBookService.GetOrderBook(pairId);
             if(orderBook == null)
             {
                 // log error order book not found
@@ -50,22 +52,22 @@ namespace KukoinServer.Services
             throw new NotImplementedException();
         }
 
-        private MessageModel DropOldSequences(MessageModel lastMessage, int sequence)
+        private AsksBidsDTO DropOldSequences(AsksBidsDTO lastMessage, int sequence)
         {
             throw new NotImplementedException();
         }
 
-        private MessageModel DropZeroPrices(MessageModel filteredSeqMessage)
+        private AsksBidsDTO DropZeroPrices(AsksBidsDTO filteredSeqMessage)
         {
             throw new NotImplementedException();
         }
 
-        private OrderBookModel FilterEmptyPairsFromOredBook(OrderBookModel orderBook, MessageModel filteredZeroPriceMessage)
+        private OrderBookModel FilterEmptyPairsFromOredBook(OrderBookModel orderBook, AsksBidsDTO filteredZeroPriceMessage)
         {
             throw new NotImplementedException();
         }
 
-        private OrderBookModel UpdatePrizesInOrderBook(OrderBookModel orderBookWithoutEmptyPairs, MessageModel filteredZeroPriceMessage)
+        private OrderBookModel UpdatePrizesInOrderBook(OrderBookModel orderBookWithoutEmptyPairs, AsksBidsDTO filteredZeroPriceMessage)
         {
             throw new NotImplementedException();
         }

@@ -1,3 +1,4 @@
+using KukoinServer;
 using KukoinServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,10 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddTransient<HttpService>();
 builder.Services.AddTransient<OrderBookService>();
 builder.Services.AddTransient<KucoinProviderService>();
 
 builder.Services.AddSingleton<KucoinMessagingService>();
+builder.Services.AddSingleton<MessagesStorage>();
 
 var app = builder.Build();
 

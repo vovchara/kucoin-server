@@ -18,7 +18,7 @@ namespace KukoinServer.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<StatusDTO>> GetKucoins()
         {
-            return NotFound("Error: please need to specify pair name, use api/XXX");
+            return NotFound("Error: please need to specify pair name, use api/XXX. For example api/BTC-USDT");
         }
 
         [HttpGet("{pairId}")]
@@ -30,8 +30,7 @@ namespace KukoinServer.Controllers
             {
                 return NotFound($"Pair={pairId} can not be received!");
             }
-            //var result = new StatusDTO { pair = pairId, maxBid = 100500d, minAsk = 123d };
-            //await Task.Delay(10);
+
             return result;
         }
     }
