@@ -31,38 +31,36 @@ namespace KukoinServer.Services
 
         internal async Task<bool> ConnectToSocket(string pairId)
         {
-            //todo double check logic of connect when connection was estableshed but disconected.
             if (!string.IsNullOrEmpty(_currentPair) && _currentPair != pairId)
             {
                 return false; //todo log wrong pair
             }
             _currentPair = pairId;
 
-            if (_socket != null)
+            if (_socket == null)
             {
-                return await _connectTcs.Task;
+                var initialData = await GetInitData();
+                if (initialData == null)
+                {
+                    return false; //todo add log
+                }
+
+                CreateSocket(initialData);
             }
 
-            var initialData = await GetInitData();
-            if (initialData == null)
-            {
-                return false; //todo add log
-            }
-
-            CreateAndOpenSocket(initialData);
+            _socket.Open();
 
             _connectTcs.TrySetResult(false);
             _connectTcs = new TaskCompletionSource<bool>();
             return await _connectTcs.Task;
         }
 
-        private void CreateAndOpenSocket(SocketInitInfoModel initialData)
+        private void CreateSocket(SocketInitInfoModel initialData)
         {
             _socket = new WebSocket(initialData.instanceServers[0].endpoint + "?token=" + initialData.token);
             _socket.Opened += OnSocketOpened;
             _socket.Closed += OnSocketClosed;
             _socket.MessageReceived += OnMessageReceived;
-            _socket.Open();
         }
 
         private void OnMessageReceived(object? sender, MessageReceivedEventArgs e)
@@ -130,6 +128,8 @@ namespace KukoinServer.Services
             _isWelcomeReceived = false;
             _isSubscribedAndReady = false;
             //todo log socket connection closed + time
+
+            ConnectToSocket(_currentPair); //reconnect, stupid simple solution
         }
 
         private void OnSocketOpened(object? sender, EventArgs e)

@@ -25,5 +25,22 @@ namespace KukoinServer.Services
                 return null;
             }
         }
+
+        public async Task<T> DoGet<T>(string url) where T : class
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var result = await client.GetStringAsync(url);
+                var resultParsed = JsonConvert.DeserializeObject<HttpResponseModel<T>>(result);
+                return resultParsed.data;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return null;
+            }
+        }
     }
 }

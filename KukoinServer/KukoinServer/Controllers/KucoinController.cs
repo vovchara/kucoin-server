@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KukoinServer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class KucoinController : ControllerBase
     {
@@ -15,10 +15,10 @@ namespace KukoinServer.Controllers
             this.kucoinProvider = kucoinProvider;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<StatusDTO>> GetKucoins()
+        [HttpGet("default")]
+        public Task<ActionResult<StatusDTO>> GetKucoin()
         {
-            return NotFound("Error: please need to specify pair name, use api/XXX. For example api/BTC-USDT");
+            return GetKucoin("BTC-USDT");
         }
 
         [HttpGet("{pairId}")]

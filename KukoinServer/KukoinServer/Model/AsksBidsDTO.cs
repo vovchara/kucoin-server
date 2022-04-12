@@ -2,10 +2,10 @@
 {
     public class AsksBidsDTO
     {
-        public CoinItemModel[] asks { get; }
-        public CoinItemModel[] bids { get; }
+        public CoinItemMessageModel[] asks { get; }
+        public CoinItemMessageModel[] bids { get; }
 
-        public AsksBidsDTO(CoinItemModel[] asks, CoinItemModel[] bids)
+        public AsksBidsDTO(CoinItemMessageModel[] asks, CoinItemMessageModel[] bids)
         {
             this.asks = asks;
             this.bids = bids;

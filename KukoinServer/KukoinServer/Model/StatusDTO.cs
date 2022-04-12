@@ -2,8 +2,19 @@
 {
     public class StatusDTO
     {
-        public double minAsk { get; set; }
-        public double maxBid { get; set; }
-        public string pair { get; set; }
+        public double minAskPrice { get; }
+        public double askAmount { get; }
+        public double maxBidPrice { get;  }
+        public double bidAmount { get; }
+        public string pair { get; }
+
+        public StatusDTO(double minAsk, double askAmount, double maxBid, double bidAmount, string pair)
+        {
+            this.minAskPrice = minAsk;
+            this.askAmount = askAmount;
+            this.maxBidPrice = maxBid;
+            this.bidAmount = bidAmount;
+            this.pair = pair;
+        }
     }
 }
