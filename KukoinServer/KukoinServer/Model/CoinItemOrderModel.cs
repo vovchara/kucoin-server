@@ -3,7 +3,7 @@
     public class CoinItemOrderModel
     {
         public double price { get; set; }
-        public double size { get; }
+        public double size { get; set; }
 
         public CoinItemOrderModel(string[] item)
         {

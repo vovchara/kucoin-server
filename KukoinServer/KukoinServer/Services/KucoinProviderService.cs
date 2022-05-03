@@ -71,7 +71,7 @@ namespace KukoinServer.Services
                 var updatedPriceAsk = filteredMessage.asks.FirstOrDefault(a => a.price == orderAsk.price);
                 if (updatedPriceAsk != null)
                 {
-                    orderAsk.price = updatedPriceAsk.price;
+                    orderAsk.size = updatedPriceAsk.size;
                 }
             }
 
@@ -80,7 +80,7 @@ namespace KukoinServer.Services
                 var updatedPriceBid = filteredMessage.bids.FirstOrDefault(a => a.price == orderBid.price);
                 if (updatedPriceBid != null)
                 {
-                    orderBid.price = updatedPriceBid.price;
+                    orderBid.size = updatedPriceBid.size;
                 }
             }
 
